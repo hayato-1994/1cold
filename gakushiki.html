@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="学識一問一答">
+<meta name="theme-color" content="#0f766e">
+<title>第1種冷凍：学識 一問一答（冷媒とブライン編・全43問）- 第1種冷凍機械責任者</title>
+<style>
+  :root {
+    --primary: #0f766e; --primary-light: #0d9488; --bg: #f8fafc; --card-bg: #ffffff;
+    --text: #0f172a; --text-muted: #64748b; --correct: #059669; --correct-bg: #ecfdf5;
+    --correct-border: #6ee7b7; --incorrect: #dc2626; --incorrect-bg: #fef2f2;
+    --incorrect-border: #fca5a5; --border: #e2e8f0; --maru-color: #0d9488; --batsu-color: #dc2626;
+    --bookmark: #d97706; --bookmark-bg: #fef3c7;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif; }
+  body { background: var(--bg); color: var(--text); padding: calc(env(safe-area-inset-top) + 10px) 12px calc(env(safe-area-inset-bottom) + 16px) 12px; min-height: 100vh; display: flex; flex-direction: column; touch-action: manipulation; }
+  .container { max-width: 620px; margin: 0 auto; width: 100%; display: flex; flex-direction: column; flex: 1; }
+  header { background: var(--card-bg); padding: 12px 14px; border-radius: 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); margin-bottom: 10px; }
+  .title-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  h1 { font-size: 1.02rem; font-weight: 700; color: var(--primary); display: flex; align-items: center; gap: 6px; }
+  .badge-count { font-size: 0.68rem; background: #ccfbf1; color: #0f766e; padding: 2px 6px; border-radius: 999px; font-weight: 700; }
+  .btn-group { display: flex; gap: 5px; }
+  .btn-action-sm { font-size: 0.72rem; padding: 4px 8px; border-radius: 6px; cursor: pointer; font-weight: 600; border: none; }
+  .btn-reset { color: #dc2626; border: 1px solid #fecaca; background: #fff; }
+  .btn-stats { color: var(--primary); border: 1px solid #99f6e4; background: #f0fdfa; }
+  .filters { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 6px; }
+  .filters-full { grid-column: span 2; display: flex; gap: 6px; }
+  select, input.search-box { width: 100%; padding: 7px 9px; border-radius: 8px; border: 1px solid var(--border); font-size: 0.8rem; background: #fff; font-weight: 600; color: var(--text); }
+  input.search-box { font-weight: normal; }
+  .progress-bar { width: 100%; height: 5px; background: #e2e8f0; border-radius: 3px; overflow: hidden; margin: 6px 0 4px 0; }
+  .progress-fill { height: 100%; background: var(--primary-light); width: 0%; transition: width 0.2s ease; }
+  .stats-row { display: flex; justify-content: space-between; font-size: 0.74rem; color: var(--text-muted); font-weight: 500; }
+  .card { background: var(--card-bg); border-radius: 16px; padding: 16px 14px; box-shadow: 0 3px 12px rgba(0,0,0,0.05); flex: 1; display: flex; flex-direction: column; position: relative; }
+  .badge-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 6px; }
+  .badge-left { display: flex; gap: 5px; flex-wrap: wrap; align-items: center; }
+  .badge { font-size: 0.7rem; padding: 2px 7px; border-radius: 5px; font-weight: 700; }
+  .badge-sub { background: #ccfbf1; color: #0f766e; }
+  .badge-year { background: #e0f2fe; color: #0369a1; }
+  .badge-num { background: #f1f5f9; color: #475569; }
+  .badge-theme { background: #fef3c7; color: #92400e; max-width: 190px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .btn-bookmark { background: none; border: 1px solid var(--border); border-radius: 6px; padding: 2px 8px; font-size: 0.72rem; cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 3px; color: var(--text-muted); }
+  .btn-bookmark.active { background: var(--bookmark-bg); border-color: #fcd34d; color: var(--bookmark); font-weight: 700; }
+  .question-scroll { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; margin-bottom: 12px; }
+  .question-text { font-size: 0.98rem; line-height: 1.68; color: #1e293b; font-weight: 500; }
+  .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: auto; padding-bottom: 2px; }
+  .btn-answer { min-height: 60px; font-size: 1.25rem; font-weight: 800; border-radius: 12px; border: 2px solid var(--border); background: #ffffff; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; }
+  .btn-answer small { font-size: 0.7rem; font-weight: 500; opacity: 0.75; }
+  .btn-answer.maru { color: var(--maru-color); border-color: #99f6e4; }
+  .btn-answer.batsu { color: var(--batsu-color); border-color: #fecaca; }
+  .btn-answer:disabled { opacity: 0.4; cursor: default; }
+  .nav-sub-row { display: flex; justify-content: space-between; margin-top: 6px; padding: 0 4px; }
+  .btn-nav-link { background: none; border: none; font-size: 0.74rem; color: var(--text-muted); cursor: pointer; text-decoration: underline; }
+  .explanation-box { margin-top: 10px; padding: 12px; border-radius: 12px; display: none; }
+  .explanation-box.correct { background: var(--correct-bg); border: 1.5px solid var(--correct-border); }
+  .explanation-box.incorrect { background: var(--incorrect-bg); border: 1.5px solid var(--incorrect-border); }
+  .result-title { font-size: 1rem; font-weight: 800; margin-bottom: 5px; }
+  .result-title.correct { color: var(--correct); }
+  .result-title.incorrect { color: var(--incorrect); }
+  .law-tag { display: inline-block; font-size: 0.72rem; font-weight: 700; background: #ffffff; padding: 2px 6px; border-radius: 4px; border: 1px solid rgba(0,0,0,0.1); margin-bottom: 6px; color: #0f766e; }
+  .exp-text { font-size: 0.88rem; line-height: 1.58; color: #1e293b; margin-bottom: 10px; }
+  .exp-actions { display: flex; gap: 8px; }
+  .btn-next { flex: 1; min-height: 44px; background: var(--primary); color: #fff; border: none; border-radius: 8px; font-size: 0.94rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+  .btn-prev-sm { padding: 0 12px; min-height: 44px; background: #fff; border: 1px solid var(--border); border-radius: 8px; font-size: 0.82rem; font-weight: 600; cursor: pointer; color: var(--text); }
+  
+  .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 100; justify-content: center; align-items: center; padding: 16px; }
+  .modal-content { background: #fff; border-radius: 16px; width: 100%; max-width: 520px; max-height: 82vh; display: flex; flex-direction: column; padding: 18px; box-shadow: 0 10px 25px rgba(0,0,0,0.15); }
+  .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+  .modal-header h2 { font-size: 0.98rem; color: var(--primary); font-weight: 700; }
+  .btn-close { background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--text-muted); }
+  .modal-body { overflow-y: auto; flex: 1; }
+  .stat-item { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 1px solid #f1f5f9; font-size: 0.82rem; }
+  .stat-theme-name { font-weight: 600; color: #1e293b; flex: 1; padding-right: 8px; }
+  .stat-rate { font-weight: 700; color: var(--primary); min-width: 50px; text-align: right; }
+  .stat-detail { font-size: 0.72rem; color: var(--text-muted); min-width: 60px; text-align: right; }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <div class="title-row">
+      <h1>第1種冷凍：学識 <span class="badge-count">冷媒とブライン編 全43問</span></h1>
+      <div class="btn-group">
+        <button class="btn-action-sm btn-stats" onclick="openStatsModal()">📊 成績一覧</button>
+        <button class="btn-action-sm btn-reset" onclick="resetStats()">リセット</button>
+      </div>
+    </div>
+    <div class="filters">
+      <select id="yearFilter" onchange="applyFilters()">
+        <option value="ALL">全年度・テキスト全問</option>
+      </select>
+      <select id="orderFilter" onchange="applyFilters()">
+        <option value="sequential">出題順</option>
+        <option value="random">シャッフル</option>
+        <option value="wrongOnly">要復習 (誤答) のみ</option>
+        <option value="bookmarkOnly">★ ブックマークのみ</option>
+      </select>
+      <div class="filters-full">
+        <select id="themeFilter" onchange="applyFilters()" style="flex: 1.2;">
+          <option value="ALL">すべての分類テーマ</option>
+        </select>
+        <input type="text" id="searchBox" class="search-box" placeholder="キーワード検索..." oninput="applyFilters()" style="flex: 0.8;">
+      </div>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="stats-row">
+      <span id="currentIdxText">0 / 0 問</span>
+      <span id="scoreText">正解率: 0%</span>
+    </div>
+  </header>
+  <div class="card" id="quizCard">
+    <div class="badge-row">
+      <div class="badge-left">
+        <span class="badge badge-sub" id="badgeSub">学識</span>
+        <span class="badge badge-year" id="badgeYear">年度</span>
+        <span class="badge badge-num" id="badgeNum">問題番号</span>
+        <span class="badge badge-theme" id="badgeTheme">出題テーマ</span>
+      </div>
+      <button class="btn-bookmark" id="btnBookmark" onclick="toggleBookmark()">★ 保存</button>
+    </div>
+    <div class="question-scroll">
+      <div class="question-text" id="questionText">読み込み中...</div>
+    </div>
+    <div class="actions" id="actionButtons">
+      <button class="btn-answer maru" id="btnMaru" onclick="checkAnswer('○')">○ 正しい<small>[キー: 1 または O]</small></button>
+      <button class="btn-answer batsu" id="btnBatsu" onclick="checkAnswer('×')">× 誤り<small>[キー: 2 または X]</small></button>
+    </div>
+    <div class="nav-sub-row">
+      <button class="btn-nav-link" onclick="prevQuestion()">◀ 前の問題へ</button>
+      <button class="btn-nav-link" onclick="skipQuestion()">この問題をスキップ ▶</button>
+    </div>
+    <div class="explanation-box" id="explanationBox">
+      <div class="result-title" id="resultTitle"></div>
+      <div class="law-tag" id="lawTag"></div>
+      <div class="exp-text" id="expText"></div>
+      <div class="exp-actions">
+        <button class="btn-prev-sm" onclick="prevQuestion()">◀ 前へ</button>
+        <button class="btn-next" id="btnNext" onclick="nextQuestion()">次の問題へ ▶ [Space / Enter]</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="statsModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>📊 学識：分野別正答率一覧 (冷媒とブライン)</h2>
+      <button class="btn-close" onclick="closeStatsModal()">✕</button>
+    </div>
+    <div class="modal-body" id="statsModalBody"></div>
+  </div>
+</div>
+
+<script>
+const allQuestions = [{"id": 3001, "subject": "学識", "year": "2025年度(令和7年)", "q_num": "問1", "branch": "イ", "theme": "冷媒の熱力学特性", "question": "モリエール図（p-h線図）において、冷媒の臨界温度が高いほど、常温での凝縮に必要な高圧側の圧力が低くなり、冷凍サイクルの動力損失を抑えやすい。", "answer": "○", "law": "学識・冷媒特性", "explanation": "臨界温度が高い冷媒（アンモニアやR134aなど）は、通常の冷却水温度で容易に凝縮液化させることができ、高圧圧力が過度に高くならないため圧縮仕事の面で有利である。"}, {"id": 3002, "subject": "学識", "year": "2025年度(令和7年)", "q_num": "問1", "branch": "ロ", "theme": "冷媒の熱力学特性", "question": "アンモニア（R717）は、標準沸点が約-33℃であり、単位質量あたりの冷凍効果（蒸発潜熱）が非常に大きく、冷媒循環量が少なくて済むという優れた特徴を持つ。", "answer": "○", "law": "学識・冷媒特性", "explanation": "アンモニアは蒸発潜熱が大きいため、大容量の冷凍装置において冷媒配管径や循環量を小さくできる優れた熱力学特性を持つ。"}, {"id": 3003, "subject": "学識", "year": "2025年度(令和7年)", "q_num": "問1", "branch": "ハ", "theme": "冷媒の熱力学特性", "question": "二酸化炭素（R744）は、オゾン層破壊係数（ODP）がゼロ、地球温暖化係数（GWP）が1と極めて小さいが、臨界温度が約31℃と低いため、夏季等には超臨界サイクルとなり高圧圧力が著しく高くなる。", "answer": "○", "law": "学識・冷媒特性", "explanation": "CO2は自然冷媒として環境性能に優れるが、低臨界温度のため高圧側が7〜10 MPaを超える超臨界状態で運転され、特有のサイクル特性を示す。"}, {"id": 3004, "subject": "学識", "year": "2025年度(令和7年)", "q_num": "問2", "branch": "イ", "theme": "冷媒と冷凍機油の溶解性", "question": "フロン系冷媒（HFC類など）と相性の良いポリオールエステル（POE）油は、冷媒に対する溶解性が高いため、コンプレッサー内の油粘度が低下しすぎないよう油温管理が重要となる。", "answer": "○", "law": "学識・潤滑油", "explanation": "冷媒が潤滑油に大量に溶解すると油の粘度が低下し、軸受け等の潤滑不良を招くおそれがあるため、油温や液戻りの管理が不可欠。"}, {"id": 3005, "subject": "学識", "year": "2025年度(令和7年)", "q_num": "問2", "branch": "ロ", "theme": "冷媒の化学的性質", "question": "アンモニアは炭素を含まないため、フロン系冷媒と比較して地球温暖化係数（GWP）およびオゾン層破壊係数（ODP）がいずれもゼロである。", "answer": "○", "law": "学識・冷媒特性", "explanation": "アンモニア（NH3）はC（炭素）やハロゲンを含まないため、ODP=0、GWP=0の環境に優しい自然冷媒である。"}, {"id": 3006, "subject": "学識", "year": "2025年度(令和7年)", "q_num": "問2", "branch": "ハ", "theme": "冷媒の安全性と毒性", "question": "アンモニアは毒性および可燃性がともに高く、高圧ガス保安法上では「毒性ガス」および「可燃性ガス」の両方に指定されているため、漏えい検知や換気設備の厳格な設置が義務付けられている。", "answer": "○", "law": "学識・安全性", "explanation": "アンモニアは特有の強い刺激臭（毒性）があり、一定濃度以上で燃焼性（可燃性）も有するため厳重な安全管理が必要。"}, {"id": 3007, "subject": "学識", "year": "2016年度(平成28年)", "q_num": "問4", "branch": "イ-1", "theme": "冷媒の熱力学的性質", "question": "冷媒の蒸発温度が臨界温度に近づくと、飽和液と飽和蒸気の比エンタルピー差が小さくなるので、冷凍効果が小さくなる傾向がある。", "answer": "○", "law": "学識・冷媒特性", "explanation": "p-h線図において蒸発温度（圧力）が上昇して臨界点に近づくと、飽和液線と飽和蒸気線の間隔（蒸発潜熱）が狭くなるため、冷凍効果は小さくなる。"}, {"id": 3008, "subject": "学識", "year": "2016年度(平成28年)", "q_num": "問4", "branch": "イ-2", "theme": "冷媒の熱力学的性質", "question": "二酸化炭素（R744）を冷媒として用いたヒートポンプ式給湯機においては、臨界温度以上で冷媒の潜熱により放熱し、その放熱過程の大半は等温過程である。", "answer": "×", "law": "学識・冷媒特性", "explanation": "二酸化炭素の臨界温度は約31℃と低いため、外気等への放熱過程は臨界温度以上（超臨界域）で行われる。超臨界域では相変化（潜熱）が生じず「顕熱」により放熱するため、温度変化を伴い等温過程にはならない。"}, {"id": 3009, "subject": "学識", "year": "2016年度(平成28年)", "q_num": "問4", "branch": "ロ-1", "theme": "非共沸混合冷媒", "question": "非共沸混合冷媒は等圧過程下の相変化中に温度が変化するため、等圧で加熱していくと液相から蒸発し始める温度（沸点）と蒸発終了時の温度（露点）との間に温度勾配が生じる。", "answer": "○", "law": "学識・混合冷媒", "explanation": "非共沸混合冷媒は気液平衡状態において気相と液相の成分比が異なるため、一定圧力下で蒸発・凝縮する際にも温度が連続的に変化する（温度勾配）。"}, {"id": 3010, "subject": "学識", "year": "2016年度(平成28年)", "q_num": "問4", "branch": "ロ-2", "theme": "非共沸混合冷媒", "question": "非共沸混合冷媒の相変化にともなって生じる温度勾配を利用して成績係数の向上を図ったサイクルをローレンツサイクルといい、相変化時の冷媒側熱伝達率は単成分冷媒に比べて向上する。", "answer": "×", "law": "学識・混合冷媒", "explanation": "温度勾配を利用するサイクルをローレンツサイクルと呼ぶ記述は正しいが、非共沸混合冷媒の相変化時の冷媒側熱伝達率は、物質移動抵抗等の影響により単成分冷媒（または共沸混合冷媒）よりも「低下（劣る）」する。"}, {"id": 3011, "subject": "学識", "year": "2016年度(平成28年)", "q_num": "問4", "branch": "ハ", "theme": "アンモニア冷媒の性質", "question": "アンモニアは水分の溶解度が大きく、蒸気圧縮式冷凍装置のアンモニアに水分が混入していると凝固点が低下するため、フルオロカーボン冷凍装置に比べて膨張弁における水分の凍結閉塞は起こりにくい。", "answer": "○", "law": "学識・冷媒と水分", "explanation": "アンモニアと水は任意の割合で溶解して安定したアンモニア水を形成し、凝固点が下がるため、0℃以下になっても膨張弁オリフィス等で氷結閉塞を起こしにくい。"}, {"id": 3012, "subject": "学識", "year": "2016年度(平成28年)", "q_num": "問4", "branch": "ニ", "theme": "冷媒と冷凍機油", "question": "R32やR507AのようなHFC系冷媒と鉱物油の組み合わせでは、相互溶解性が非常に高く全温度域で均一に溶解するため、油戻しが極めて容易である。", "answer": "×", "law": "学識・冷凍機油", "explanation": "HFC系冷媒は鉱物油（ナフテン系やパラフィン系）との溶解性が非常に「小さく（非相溶）」、二層分離しやすい。そのため、HFC系冷媒にはエステル油（POE）やエーテル油（PVE, PAG）などの合成油が用いられる。"}, {"id": 3013, "subject": "学識", "year": "2017年度(平成29年)", "q_num": "問4", "branch": "イ-1", "theme": "混合冷媒の分類と命名法", "question": "冷媒番号において、400番台は液相と気相で成分比が異なる非共沸混合冷媒を示し、500番台はある成分比で液相と気相の成分比が等しくなる共沸混合冷媒を示す。", "answer": "○", "law": "学識・冷媒記号", "explanation": "ASHRAE 34規格において、混合冷媒のうち非共沸混合冷媒にはR400番台、共沸混合冷媒にはR500番台が割り当てられている。"}, {"id": 3014, "subject": "学識", "year": "2017年度(平成29年)", "q_num": "問4", "branch": "イ-2", "theme": "混合冷媒の組成", "question": "R32とR125を50/50 mass%で混合した冷媒記号はR410Aであり、R125とR143aを50/50 mass%で混合した冷媒記号は共沸混合冷媒であるR507Aである。", "answer": "○", "law": "学識・混合冷媒", "explanation": "R410AはR32/R125（50/50 mass%）の擬似共沸（非共沸400番台）、R507AはR125/R143a（50/50 mass%）の共沸混合冷媒（500番台）である。"}, {"id": 3015, "subject": "学識", "year": "2017年度(平成29年)", "q_num": "問4", "branch": "ロ-1", "theme": "冷媒の特性比較（GWP・臨界温度・毒性）", "question": "R134a、R410A、R717（アンモニア）の3冷媒を比較したとき、地球温暖化係数（GWP）が最も高いのはR410Aであり、臨界温度が最も高く毒性が最も強いのはR717である。", "answer": "○", "law": "学識・冷媒物性比較", "explanation": "GWPはR410A(1975) > R134a(1300) > R717(0)。臨界温度はR717(132.3℃) > R134a(100.9℃) > R410A(71.4℃)。毒性はアンモニア（R717）が強毒性である。"}, {"id": 3016, "subject": "学識", "year": "2017年度(平成29年)", "q_num": "問4", "branch": "ロ-2", "theme": "冷媒の特性比較（GWP・臨界温度・毒性）", "question": "R22、R32、R123、R134aの4冷媒を比較したとき、地球温暖化係数（GWP）が最も高いのはR22であり、GWPが最も低く臨界温度が最も高く毒性が最も強いのはR123である。", "answer": "○", "law": "学識・冷媒物性比較", "explanation": "GWPはR22(1700) > R134a(1300) > R32(550) > R123(120)。臨界温度はR123(183.7℃)が最高。毒性はHCFCのR123（許容濃度50ppm）が最も強い（他の3冷媒は毒性弱・Aグループ）。"}, {"id": 3017, "subject": "学識", "year": "2017年度(平成29年)", "q_num": "問4", "branch": "ハ", "theme": "無機ブラインと有機ブライン", "question": "塩化ナトリウム水溶液などの無機ブラインは、エチレングリコール水溶液などの有機ブラインに比べて金属に対する腐食性が強く、ブラインに要求される性質としては比熱や熱伝導率が大きいことが挙げられる。", "answer": "○", "law": "学識・ブライン", "explanation": "無機ブライン（塩化ナトリウム、塩化カルシウム等）は金属への腐食性が極めて強い。ブラインは熱を効率よく運ぶため、比熱・熱伝導率が大きく、粘性係数が小さいことが求められる。"}, {"id": 3018, "subject": "学識", "year": "テキスト第5章", "q_num": "5.2", "branch": "環境評価指標", "theme": "地球温暖化評価（TEWI）", "question": "総合的地球温暖化指数TEWIは、冷媒の大気放出による直接効果と、機器を駆動するエネルギー消費に伴うCO2排出の間接効果との総和で評価される。", "answer": "○", "law": "学識・環境評価", "explanation": "TEWI（Total Equivalent Warming Impact）は「直接効果（冷媒漏洩・未回収による影響）＋間接効果（消費電力量×発電CO2原単位による影響）」として機器の生涯排出総量で評価する。"}, {"id": 3019, "subject": "学識", "year": "テキスト第5章", "q_num": "5.3", "branch": "冷媒番号の命名法", "theme": "冷媒記号の規則", "question": "単成分ふっ素系冷媒の冷媒番号において、百の位は「炭素原子数−1」、十の位は「水素原子数＋1」、一の位は「ふっ素原子数」を表す。", "answer": "○", "law": "学識・冷媒記号", "explanation": "ASHRAEおよびISO規格において、R(C-1)(H+1)(F)の規則で番号が決定される（例：R134aはC=2-1=1, H=2+1=3, F=4）。"}, {"id": 3020, "subject": "学識", "year": "テキスト第5章", "q_num": "5.5", "branch": "冷媒の圧力損失", "theme": "低圧蒸気の圧力損失特性", "question": "同一冷凍能力、同一配管径、層流の条件において、低圧側冷媒蒸気の圧力損失は、冷媒の比体積および粘性係数に比例し、冷凍効果に反比例する。", "answer": "○", "law": "学識・圧力損失特性", "explanation": "管摩擦損失式より導かれる関係式 ΔP ∝ (η・v) / Δh のとおり、粘性係数ηと比体積vに比例し、冷凍効果Δhに反比例する。"}, {"id": 3021, "subject": "学識", "year": "テキスト第5章", "q_num": "5.6", "branch": "冷媒と材料適合性", "theme": "金属材料への影響", "question": "アンモニア冷媒は銅および銅合金を腐食するため鋼管が使用され、ふっ素系冷媒設備では2%を超えるマグネシウムを含むアルミニウム合金は使用できない。", "answer": "○", "law": "学識・材料適合性", "explanation": "アンモニアと銅系金属は錯体腐食を起こすため厳禁。ふっ素系冷媒ではマグネシウム含有率が2%を超えるアルミニウム合金は冷媒と反応するため使用できない。"}, {"id": 3022, "subject": "学識", "year": "テキスト第5章", "q_num": "5.8", "branch": "吸収冷凍機の冷媒と吸収剤", "theme": "吸収冷凍機の特性比較", "question": "水／臭化リチウム系吸収冷凍機は冷媒が水であるため最低蒸発温度は0℃より高く設定されるのに対し、アンモニア／水系吸収冷凍機は冷媒がアンモニアであるため-60℃までの低温冷凍が可能である。", "answer": "○", "law": "学識・吸収冷凍機", "explanation": "水/臭化リチウム系は水が冷媒のため0℃以下では凍結し空調用等に限られるが、アンモニア/水系はアンモニアが冷媒（水が吸収剤）のため氷点下の低温冷凍・製氷に適用される。"}, {"id": 3023, "subject": "学識", "year": "テキスト第5章", "q_num": "5.9", "branch": "塩化カルシウムブライン", "theme": "無機ブラインの共晶点", "question": "塩化カルシウムブラインの凍結点は濃度29.9 mass%のとき最低値（共晶点）の-55℃を示し、これ以上の濃度になると凍結点は逆に上昇する。", "answer": "○", "law": "学識・ブライン物性", "explanation": "共晶濃度（29.9 mass%）までは水の凍結点降下により凍結温度が下がるが、それを超えると塩化カルシウムの結晶析出線に沿って凍結温度は上昇する。"}, {"id": 3024, "subject": "学識", "year": "2018年度(平成30年)", "q_num": "問4", "branch": "(1)-1", "theme": "冷媒の熱力学特性（標準沸点・臨界温度）", "question": "R134a、R507A、R717の3冷媒において、標準沸点が高い順に並べると「R134a ＞ R717 ＞ R507A」であり、臨界温度が高い順に並べると「R717 ＞ R134a ＞ R404A」である。", "answer": "○", "law": "学識・冷媒物性比較", "explanation": "標準沸点はR134a(-26.1℃) > R717(-33.3℃) > R507A(-46.7℃)。臨界温度はR717(132.3℃) > R134a(100.9℃) > R404A(71.6℃)となる。"}, {"id": 3025, "subject": "学識", "year": "2018年度(平成30年)", "q_num": "問4", "branch": "(1)-2", "theme": "冷媒の環境影響と分子量", "question": "R134a、R404A、R410Aの中で地球温暖化係数（GWP）が最も高いのはR404Aであり、R32、R134a、R410Aの中でモル質量（分子量）が最も大きいのはR134aである。", "answer": "○", "law": "学識・冷媒物性比較", "explanation": "GWPはR404A(3784) > R410A(1975) > R134a(1300)。モル質量はR134a(102.0) > R410A(72.6) > R32(52.0)の順となる。"}, {"id": 3026, "subject": "学識", "year": "2018年度(平成30年)", "q_num": "問4", "branch": "(3)", "theme": "冷媒番号の命名規則", "question": "冷媒記号「R729」は空気を表し、700番台は無機化合物であることを示し、下二桁の29はその分子量（見かけの平均モル質量）を表している。", "answer": "○", "law": "学識・冷媒記号", "explanation": "ASHRAE 34規格において、700番台は無機化合物を表し、下二桁に分子量（空気の場合は約28.96≒29、水はR718、アンモニアはR717、二酸化炭素はR744）を付す。"}, {"id": 3027, "subject": "学識", "year": "2018年度(平成30年)", "q_num": "問4", "branch": "(4)", "theme": "合成冷凍機油の種類", "question": "HFC系冷媒等とともに用いられる合成油のPAG油はポリアルキレングリコール油の略であり、POE油はポリオールエステル油の略である。", "answer": "○", "law": "学識・冷凍機油", "explanation": "PAGはPolyalkylene Glycol（カーエアコン等で多用）、POEはPolyol Ester（一般空調・冷凍機等で多用）の略称である。"}, {"id": 3028, "subject": "学識", "year": "2019年度(令和元年)", "q_num": "問4", "branch": "(1)", "theme": "ふっ素系混合冷媒の成分比", "question": "R407Cの混合成分比は「R32/R125/R134a＝23/25/52 mass%」であり、R404Aの混合成分比は「R125/R134a/R143a＝44/4/52 mass%」である。", "answer": "○", "law": "学識・混合冷媒", "explanation": "R407Cは3種混合で23/25/52 mass%、R404Aは3種混合で44/4/52 mass%、R410AはR32/R125(50/50 mass%)、R507AはR125/R143a(50/50 mass%)である。"}, {"id": 3029, "subject": "学識", "year": "2019年度(令和元年)", "q_num": "問4", "branch": "(2)-1", "theme": "自然冷媒の特性比較（沸点・臨界温度・GWP）", "question": "自然冷媒の特性において、標準沸点が高い順は「R600a ＞ R717 ＞ R290」であり、臨界温度が高い順は「R600a ＞ R290 ＞ R744」、GWPが高い順は「R290 ＞ R744 ＞ R717」である。", "answer": "○", "law": "学識・自然冷媒", "explanation": "標準沸点はイソブタン(-11.8℃) > アンモニア(-33.3℃) > プロパン(-42.1℃)。臨界温度はR600a(134.6℃) > R290(96.7℃) > CO2(31.0℃)。GWPはR290(3) > R744(1) > R717(0)である。"}, {"id": 3030, "subject": "学識", "year": "2019年度(令和元年)", "q_num": "問4", "branch": "(2)-2", "theme": "自然冷媒のサイクル特性（圧力比・比熱比）", "question": "同一温度条件での冷凍サイクルにおいて、高圧/低圧の圧力比および圧縮機吸込み状態での比熱比を比較すると、いずれも「R717 ＞ R600a ＞ R290」の順に大きくなる。", "answer": "×", "law": "学識・自然冷媒サイクル特性", "explanation": "圧力比は R717(2.898) > R600a(2.742) > R290(2.409) の順で正しいが、比熱比は R717(1.42) > R290(1.24) > R600a(1.14) であり、プロパン（R290）のほうがイソブタン（R600a）より大きい。"}, {"id": 3031, "subject": "学識", "year": "2020年度(令和2年)", "q_num": "問4", "branch": "(1)", "theme": "冷媒記号の規則と分子式", "question": "単成分ふっ素系冷媒の記号において、千の位は二重結合の数、百の位は炭素数−1、十の位は水素数＋1、一の位はふっ素数を表し、末尾の小文字アルファベットは異性体を表す。", "answer": "○", "law": "学識・冷媒記号", "explanation": "ASHRAE 34規格において、冷媒記号R-X1X2X3X4xは二重結合数・炭素数-1・水素数+1・ふっ素数・異性体を表し、R32の分子式はCH2F2である。"}, {"id": 3032, "subject": "学識", "year": "2020年度(令和2年)", "q_num": "問4", "branch": "(3)", "theme": "混合冷媒の特性比較（R404A, R407C, R410A）", "question": "R404A、R407C、R410Aの3冷媒を比較したとき、GWPおよびモル質量が最も大きいのはR404Aであり、臨界温度が最も高いのはR407C、沸点が最も低いのはR410Aである。", "answer": "○", "law": "学識・混合冷媒特性", "explanation": "GWPはR404A(3784)が最大、モル質量もR404A(97.6)が最大。臨界温度はR407C(86.5℃)が最高、標準沸点はR410A(-51.4℃)が最も低い。"}, {"id": 3033, "subject": "学識", "year": "2021年度(令和3年)", "q_num": "問4", "branch": "イ", "theme": "冷媒の熱力学特性（体積能力・比熱比）", "question": "沸点の低い冷媒は同じ圧縮機押しのけ量に対する冷凍能力（体積能力）が大きいが、比熱比が大きい冷媒は断熱圧縮後の圧縮機吐出しガス温度が高くなる傾向がある。", "answer": "○", "law": "学識・冷媒特性", "explanation": "低沸点冷媒は吸込み蒸気密度が高く体積能力が大きい。また比熱比κが大きい冷媒（アンモニア等）は断熱圧縮による吐出ガス温度の上昇が大きくなる。"}, {"id": 3034, "subject": "学識", "year": "2021年度(令和3年)", "q_num": "問4", "branch": "ロ", "theme": "アンモニア冷媒と水分", "question": "アンモニアは水に対する溶解度が極めて大きく、冷媒中に水分が混入すると凝固点が低下するため、膨張弁における氷結による閉塞は起こりにくい。", "answer": "○", "law": "学識・自然冷媒", "explanation": "アンモニアと水は任意の割合で相溶してアンモニア水を形成し、純水よりも凝固点が降下するため、氷点下の蒸発条件でも膨張弁等での氷結閉塞を起こさない。"}, {"id": 3035, "subject": "学識", "year": "2021年度(令和3年)", "q_num": "問4", "branch": "ニ", "theme": "ブラインの保守管理", "question": "塩化カルシウムなどの無機ブラインは空気中の酸素を溶かし込むと金属腐食を促進し、空気中の水分を取り込むとブライン濃度が低下するため、空気との接触を極力避ける必要がある。", "answer": "○", "law": "学識・ブライン管理", "explanation": "無機ブラインは大気中の酸素溶解により金属の酸化腐食を激化させ、吸湿性により大気中の水分を吸収して濃度低下・凍結点上昇を招くため、密閉配管系が原則となる。"}, {"id": 3036, "subject": "学識", "year": "2022年度(令和4年)", "q_num": "問4", "branch": "(1)", "theme": "単一・自然冷媒の特性比較（GWP・臨界温度・沸点）", "question": "R22、R32、R134a、R290の4冷媒を比較したとき、GWPが最も高いのはR22、モル質量が最も大きく臨界温度が最も高いのはR134a、標準沸点が最も低いのはR32である。", "answer": "○", "law": "学識・冷媒物性比較", "explanation": "GWPはR22(1700)が最高。モル質量はR134a(102.0)が最大、臨界温度はR134a(100.9℃)が最高。標準沸点はR32(-51.65℃)が最も低い。"}, {"id": 3037, "subject": "学識", "year": "2022年度(令和4年)", "q_num": "問4", "branch": "(2)", "theme": "混合冷媒の特性比較（R404A, R407C, R410A, R507A）", "question": "R404A、R407C、R410A、R507Aの中で、GWPが最も高いのはR404A、モル質量が最も大きいのはR507A、臨界温度が最も高いのはR407C、標準沸点が最も低いのはR410Aである。", "answer": "○", "law": "学識・混合冷媒特性", "explanation": "GWPはR404A(3784)が最大。モル質量はR507A(98.86)が最大。臨界温度はR407C(86.54℃)が最高。標準沸点はR410A(-51.4℃)が最も低い。"}, {"id": 3038, "subject": "学識", "year": "2023年度(令和5年)", "q_num": "問4", "branch": "(1)", "theme": "冷媒の化学構造と分子式", "question": "冷媒の分子式において、R32はCH2F2、R123はCHCl2CF3、R134aはCH2FCF3であり、低GWP冷媒のHFO-1234yfは二重結合をもつCF3CF=CH2である。", "answer": "○", "law": "学識・冷媒化学式", "explanation": "R32はジフルオロメタン(CH2F2)、R123は2,2-ジクロロ-1,1,1-トリフルオロエタン(CHCl2CF3)、R134aは1,1,1,2-テトラフルオロエタン(CH2FCF3)、R1234yfは2,3,3,3-テトラフルオロプロペン(CF3CF=CH2)である。"}, {"id": 3039, "subject": "学識", "year": "2023年度(令和5年)", "q_num": "問4", "branch": "(2)", "theme": "冷媒の特性比較（臨界温度・GWP・モル質量）", "question": "R1234yf、R410A、R718（水）の3冷媒の臨界温度を高い順に並べると「R718 ＞ R1234yf ＞ R410A」であり、R32、R404A、R407Cの中でGWPが最も高いのはR404Aである。", "answer": "○", "law": "学識・冷媒物性比較", "explanation": "臨界温度はR718(水 374.0℃) > R1234yf(94.7℃) > R410A(71.4℃)。GWPはR404A(3784) > R407C(1325) > R32(550)である。"}, {"id": 3040, "subject": "学識", "year": "2023年度(令和5年)", "q_num": "問4", "branch": "(3)", "theme": "自然冷媒の特性極値", "question": "自然冷媒（R290:プロパン、R717:アンモニア、R718:水、R744:二酸化炭素）の中で、標準沸点が最も高いのはR718、臨界温度が最も低いのはR744、分子量が最も小さいのはR717である。", "answer": "○", "law": "学識・自然冷媒", "explanation": "標準沸点最高は水(R718, 100℃)。臨界温度最低はCO2(R744, 31.0℃)。分子量最小はアンモニア(R717, 17.03)である。"}, {"id": 3041, "subject": "学識", "year": "2024年度(令和6年)", "q_num": "問4", "branch": "イ", "theme": "環境指標（ODPとGWP）", "question": "オゾン層破壊係数（ODP）はCFC冷媒のR11のオゾン破壊能力を基準（1.0）とし、地球温暖化係数（GWP）は二酸化炭素（CO2）の大気温度上昇能力を基準（1.0）として各気体の影響度を表した指標である。", "answer": "○", "law": "学識・環境指標", "explanation": "ODPはR11を1.0とした相対比、GWPはCO2を1.0とした100年積算温暖化影響の相対比として定義される。"}, {"id": 3042, "subject": "学識", "year": "2024年度(令和6年)", "q_num": "問4", "branch": "ロ", "theme": "HFC冷媒とHFO冷媒", "question": "メタンやエタンの水素をふっ素置換したR32やR134aはHFC冷媒と呼ばれODPはゼロであり、プロペンの水素をふっ素置換したR1234yfやR1234ze(E)はHFO冷媒と呼ばれ、ODPがゼロで極めて低いGWPをもつ。", "answer": "○", "law": "学識・冷媒分類", "explanation": "HFC冷媒（飽和フッ化炭化水素）およびHFO冷媒（二重結合をもつフッ化オレフィン）は分子中に塩素を含まないためODP=0。HFOは大気寿命が数日と極めて短いためGWP<1の超低GWP冷媒である。"}, {"id": 3043, "subject": "学識", "year": "2024年度(令和6年)", "q_num": "問4", "branch": "ハ・ニ", "theme": "冷凍機油とブラインの系統分類", "question": "冷凍機油の鉱油にはナフテン系やパラフィン系があり、合成油にはPAG油、PVE油、POE油などがある。また無機ブラインには塩化カルシウムや塩化ナトリウム、有機ブラインにはエチレングリコールやプロピレングリコールなどがある。", "answer": "○", "law": "学識・油とブライン分類", "explanation": "炭化水素系基油の鉱油（ナフテン系・パラフィン系）と、含酸素合成油（PAG, PVE, POE）。ブラインは無機塩類水溶液と有機グリコール類・アルコール類に分類される。"}];
+
+let themeStats = {};
+try {
+  const saved = localStorage.getItem('1cold_theme_stats_gakushiki');
+  if (saved) { themeStats = JSON.parse(saved); }
+} catch (e) {}
+
+let wrongIds = new Set();
+try {
+  const saved = localStorage.getItem('1cold_wrong_gakushiki');
+  if (saved) { wrongIds = new Set(JSON.parse(saved)); }
+} catch (e) {}
+
+let bookmarkedIds = new Set();
+try {
+  const saved = localStorage.getItem('1cold_bookmarks_gakushiki');
+  if (saved) { bookmarkedIds = new Set(JSON.parse(saved)); }
+} catch (e) {}
+
+function saveState() {
+  try {
+    localStorage.setItem('1cold_theme_stats_gakushiki', JSON.stringify(themeStats));
+    localStorage.setItem('1cold_wrong_gakushiki', JSON.stringify([...wrongIds]));
+    localStorage.setItem('1cold_bookmarks_gakushiki', JSON.stringify([...bookmarkedIds]));
+  } catch (e) {}
+}
+
+function recordAnswerToTheme(theme, isCorrect) {
+  if (!theme || theme === 'nan') return;
+  if (!themeStats[theme]) { themeStats[theme] = { correct: 0, total: 0 }; }
+  themeStats[theme].total += 1;
+  if (isCorrect) { themeStats[theme].correct += 1; }
+  saveState();
+}
+
+function initYears() {
+  const years = [...new Set(allQuestions.map(q => q.year))].sort().reverse();
+  const select = document.getElementById('yearFilter');
+  years.forEach(y => {
+    if (y && y !== 'nan') {
+      const opt = document.createElement('option');
+      opt.value = y;
+      opt.textContent = y;
+      select.appendChild(opt);
+    }
+  });
+}
+
+function initThemes() {
+  const themes = [...new Set(allQuestions.map(q => q.theme))].sort();
+  const select = document.getElementById('themeFilter');
+  themes.forEach(t => {
+    if (t && t !== 'nan') {
+      const opt = document.createElement('option');
+      opt.value = t;
+      opt.textContent = t;
+      select.appendChild(opt);
+    }
+  });
+}
+
+let currentList = [...allQuestions];
+let currentIndex = 0;
+let correctCount = 0;
+let incorrectCount = 0;
+
+function applyFilters() {
+  const selectedYear = document.getElementById('yearFilter').value;
+  const selectedOrder = document.getElementById('orderFilter').value;
+  const selectedTheme = document.getElementById('themeFilter').value;
+  const keyword = document.getElementById('searchBox').value.trim().toLowerCase();
+  
+  let list = allQuestions.filter(q => {
+    if (selectedYear !== 'ALL' && q.year !== selectedYear) return false;
+    if (selectedTheme !== 'ALL' && q.theme !== selectedTheme) return false;
+    if (keyword) {
+      const combined = (q.question + q.explanation + q.theme + q.q_num + q.year).toLowerCase();
+      if (!combined.includes(keyword)) return false;
+    }
+    return true;
+  });
+  
+  if (selectedOrder === 'wrongOnly') {
+    list = list.filter(q => wrongIds.has(q.id));
+    if (list.length === 0) {
+      alert('現在「要復習（間違えた問題）」はありません。\n通常モードで学習を進めてください。');
+      document.getElementById('orderFilter').value = 'sequential';
+      return applyFilters();
+    }
+  } else if (selectedOrder === 'bookmarkOnly') {
+    list = list.filter(q => bookmarkedIds.has(q.id));
+    if (list.length === 0) {
+      alert('現在ブックマークされた問題はありません。\n気になる問題の「★ 保存」ボタンを押して登録してください。');
+      document.getElementById('orderFilter').value = 'sequential';
+      return applyFilters();
+    }
+  } else if (selectedOrder === 'random') {
+    list.sort(() => Math.random() - 0.5);
+  }
+  currentList = list;
+  currentIndex = 0;
+  correctCount = 0;
+  incorrectCount = 0;
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const qText = document.getElementById('questionText');
+  const expBox = document.getElementById('explanationBox');
+  const btnBmk = document.getElementById('btnBookmark');
+  
+  if (currentList.length === 0) {
+    qText.textContent = '該当する問題がありません（検索・フィルター条件を確認してください）。';
+    document.getElementById('btnMaru').disabled = true;
+    document.getElementById('btnBatsu').disabled = true;
+    expBox.style.display = 'none';
+    btnBmk.style.display = 'none';
+    updateStats();
+    return;
+  }
+  btnBmk.style.display = 'inline-flex';
+  const q = currentList[currentIndex];
+  document.getElementById('badgeSub').textContent = q.subject;
+  document.getElementById('badgeYear').textContent = q.year;
+  document.getElementById('badgeNum').textContent = q.q_num + ' ' + q.branch;
+  document.getElementById('badgeTheme').textContent = q.theme;
+  qText.textContent = q.question;
+  
+  if (bookmarkedIds.has(q.id)) {
+    btnBmk.className = 'btn-bookmark active';
+    btnBmk.innerHTML = '★ 保存済';
+  } else {
+    btnBmk.className = 'btn-bookmark';
+    btnBmk.innerHTML = '☆ 保存';
+  }
+  
+  document.getElementById('btnMaru').disabled = false;
+  document.getElementById('btnBatsu').disabled = false;
+  document.getElementById('actionButtons').style.display = 'grid';
+  expBox.style.display = 'none';
+  updateStats();
+}
+
+function toggleBookmark() {
+  if (currentList.length === 0) return;
+  const q = currentList[currentIndex];
+  if (bookmarkedIds.has(q.id)) {
+    bookmarkedIds.delete(q.id);
+  } else {
+    bookmarkedIds.add(q.id);
+  }
+  saveState();
+  renderQuestion();
+}
+
+function checkAnswer(userChoice) {
+  if (currentList.length === 0) return;
+  const q = currentList[currentIndex];
+  const isCorrect = (userChoice === q.answer);
+  
+  recordAnswerToTheme(q.theme, isCorrect);
+
+  document.getElementById('btnMaru').disabled = true;
+  document.getElementById('btnBatsu').disabled = true;
+  const expBox = document.getElementById('explanationBox');
+  const resultTitle = document.getElementById('resultTitle');
+  const lawTag = document.getElementById('lawTag');
+  const expText = document.getElementById('expText');
+  expBox.className = 'explanation-box ' + (isCorrect ? 'correct' : 'incorrect');
+  resultTitle.className = 'result-title ' + (isCorrect ? 'correct' : 'incorrect');
+  if (isCorrect) {
+    correctCount++;
+    resultTitle.innerHTML = '⭕ 正解！（正答：' + q.answer + '）';
+    if (wrongIds.has(q.id)) { wrongIds.delete(q.id); saveState(); }
+  } else {
+    incorrectCount++;
+    resultTitle.innerHTML = '❌ 不正解...（正答：' + q.answer + '）';
+    wrongIds.add(q.id);
+    saveState();
+  }
+  lawTag.textContent = q.law || '学識・冷媒とブライン';
+  expText.textContent = q.explanation;
+  expBox.style.display = 'block';
+  expBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  updateStats();
+}
+
+function nextQuestion() {
+  if (currentList.length === 0) return;
+  if (currentIndex + 1 < currentList.length) {
+    currentIndex++;
+    renderQuestion();
+  } else {
+    alert('全問終了しました！\n正解数: ' + correctCount + ' / ' + currentList.length + ' 問\n正解率: ' + Math.round((correctCount / currentList.length) * 100) + '%');
+    currentIndex = 0;
+    renderQuestion();
+  }
+}
+
+function prevQuestion() {
+  if (currentList.length === 0) return;
+  if (currentIndex > 0) {
+    currentIndex--;
+    renderQuestion();
+  } else {
+    alert('最初の問題です。');
+  }
+}
+
+function skipQuestion() {
+  if (currentList.length === 0) return;
+  if (currentIndex + 1 < currentList.length) {
+    currentIndex++;
+    renderQuestion();
+  } else {
+    alert('最後の問題です。');
+  }
+}
+
+function updateStats() {
+  const total = currentList.length;
+  const currentNum = total > 0 ? currentIndex + 1 : 0;
+  document.getElementById('currentIdxText').textContent = `${currentNum} / ${total} 問 (誤答: ${wrongIds.size}問 / ★${bookmarkedIds.size}問)`;
+  const answered = correctCount + incorrectCount;
+  const rate = answered > 0 ? Math.round((correctCount / answered) * 100) : 0;
+  document.getElementById('scoreText').textContent = `正解率: ${rate}% (正: ${correctCount} / 誤: ${incorrectCount})`;
+  const progress = total > 0 ? ((currentIndex) / total) * 100 : 0;
+  document.getElementById('progressFill').style.width = progress + '%';
+}
+
+function openStatsModal() {
+  const body = document.getElementById('statsModalBody');
+  body.innerHTML = '';
+  
+  const themes = [...new Set(allQuestions.map(q => q.theme))].filter(t => t && t !== 'nan').sort();
+  
+  if (themes.length === 0) {
+    body.innerHTML = '<p style="text-align:center; color:var(--text-muted); padding:20px;">まだ回答データがありません。</p>';
+  } else {
+    themes.forEach(t => {
+      const stat = themeStats[t] || { correct: 0, total: 0 };
+      totalC += stat.correct;
+      totalA += stat.total;
+      const rate = stat.total > 0 ? Math.round((stat.correct / stat.total) * 100) : 0;
+      
+      const item = document.createElement('div');
+      item.className = 'stat-item';
+      item.innerHTML = `
+        <div class="stat-theme-name">${t}</div>
+        <div class="stat-detail">${stat.correct}/${stat.total}問</div>
+        <div class="stat-rate">${stat.total > 0 ? rate + '%' : '-'}</div>
+      `;
+      body.appendChild(item);
+    });
+  }
+  document.getElementById('statsModal').style.display = 'flex';
+}
+
+function closeStatsModal() {
+  document.getElementById('statsModal').style.display = 'none';
+}
+
+function resetStats() {
+  if (confirm('間違えた問題の履歴、ブックマーク、分類別の正答率データをすべてリセットしますか？')) {
+    wrongIds.clear();
+    bookmarkedIds.clear();
+    themeStats = {};
+    try {
+      localStorage.removeItem('1cold_wrong_gakushiki');
+      localStorage.removeItem('1cold_theme_stats_gakushiki');
+      localStorage.removeItem('1cold_bookmarks_gakushiki');
+    } catch (e) {}
+    correctCount = 0;
+    incorrectCount = 0;
+    currentIndex = 0;
+    renderQuestion();
+    alert('データをリセットしました。');
+  }
+}
+
+// Keyboard shortcuts for PC
+window.addEventListener('keydown', (e) => {
+  if (document.activeElement && document.activeElement.id === 'searchBox') return;
+
+  const isExpVisible = document.getElementById('explanationBox').style.display === 'block';
+  
+  if (!isExpVisible) {
+    if (e.key === '1' || e.key === 'o' || e.key === 'O' || e.key === 'ArrowLeft') {
+      checkAnswer('○');
+    } else if (e.key === '2' || e.key === 'x' || e.key === 'X' || e.key === 'ArrowRight') {
+      checkAnswer('×');
+    }
+  } else {
+    if (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+      e.preventDefault();
+      nextQuestion();
+    }
+  }
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+  initYears();
+  initThemes();
+  applyFilters();
+});
+</script>
+</body>
+</html>
